@@ -1,3 +1,14 @@
+const assignment = {
+  id: 1, title: "NodeJS Assignment",
+  description: "Create a NodeJS server with ExpressJS",
+  due: "2021-10-10", completed: false, score: 0,
+};
+
+const module = {
+  id: 1, name: "NodeJS Module",
+    description: "Lessons Listed Here", course: "MM101"
+};
+
 export default function WorkingWithObjects(app) {
   const getAssignment = (req, res) => {
     res.json(assignment);
@@ -31,6 +42,10 @@ export default function WorkingWithObjects(app) {
     res.json(module);
   }
 
+  const getModuleName = (req, res) => {
+    res.json(module.name);
+  };
+
   const setModuleName = (req, res) => {
     const { newName } = req.params;
     module.name = newName;
@@ -51,6 +66,7 @@ export default function WorkingWithObjects(app) {
   app.get("/lab5/assignment/completed/:newCompleted", setAssignmentCompleted);
 
   app.get("/lab5/module", getModule);
+  app.get("/lab5/module/name", getModuleName);
   app.get("/lab5/module/name/:newName", setModuleName);
   app.get("/lab5/module/description/:newDesc", setModuleDesc);
 }

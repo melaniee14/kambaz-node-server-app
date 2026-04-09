@@ -1,18 +1,13 @@
-
+import model from "./model.js"
 
 export default function AssignmentsDao(db) {
 
     function updateAssignment(aid, assignmentUpdates) {
-        const { assignments } = db;
-        const assignment = assignments.find((assignment) => assignment._id === aid);
-        Object.assign(assignment, assignmentUpdates);
-        return assignment;
+        return model.updateOne({_id: aid}, {$set: assignmentUpdates}); 
     }
 
-
     function deleteAssignment(aid) {
-        const { assignments } = db;
-        db.assignments = assignments.filter((assignment) => assignment._id !== aid);
+        return model.deleteOne({_id : aid});
     }
 
 
@@ -27,13 +22,12 @@ export default function AssignmentsDao(db) {
             desc: "New Assignment Description",
             newAssign: true,
           };
-        db.assignments = [...db.assignments, newAssignment];
-        return newAssignment;
+        
+        return model.create(newAssignment);
     }
 
     function findAssignmentsForCourse(courseId) {
-        const { assignments } = db;
-        return assignments.filter((assignment) => assignment.course === courseId);
+        return model.find({ course: courseId });
       }
 
     return { updateAssignment, deleteAssignment, createAssignment, findAssignmentsForCourse};

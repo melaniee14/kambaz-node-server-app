@@ -2,10 +2,10 @@ import AssignmentsDao from "./dao.js";
 import { v4 as uuid } from "uuid";
 
 
-export default function AssignmentsRoutes(app, db) {
-    const dao = AssignmentsDao(db);
+export default function AssignmentsRoutes(app) {
+    const dao = AssignmentsDao();
 
-    const createAssignmentForCourse = (req, res) => {
+    const createAssignmentForCourse = async (req, res) => {
         const { courseId } = req.params;
         const assignment = {
             ...req.body,
@@ -13,20 +13,20 @@ export default function AssignmentsRoutes(app, db) {
             _id: uuid()
             
         };
-        const newAssignment = dao.createAssignment(assignment);
+        const newAssignment = await dao.createAssignment(assignment);
         res.send(newAssignment);
     }
 
-    const deleteAssignment = (req, res) => {
+    const deleteAssignment = async (req, res) => {
         const { aid } = req.params;
-        const status = dao.deleteAssignment(aid);
+        const status = await dao.deleteAssignment(aid);
         res.send(status);
       }
       
 
-    const findAssignmentsForCourse = (req, res) => {
+    const findAssignmentsForCourse = async (req, res) => {
         const { courseId } = req.params;
-        const assignments = dao.findAssignmentsForCourse(courseId);
+        const assignments = await dao.findAssignmentsForCourse(courseId);
         res.json(assignments);
     }
 
