@@ -55,7 +55,7 @@ export default function UserRoutes(app) {
            req.session["currentUser"] = { ...currentUser, ...userUpdates };
          }
     
-         res.json(currentUser);
+         res.json(req.session["currentUser"]);
 
 
     };
