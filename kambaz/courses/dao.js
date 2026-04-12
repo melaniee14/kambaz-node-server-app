@@ -23,9 +23,9 @@ export default function CoursesDao() {
   }
 
 
-  async function findCoursesForEnrolledUser(userId) {
-    const enrollments = await enrollmentModel.find({}, { name: 1, description: 1 });
-    const courses = await model.find({}, { name: 1, description: 1 });
+  function findCoursesForEnrolledUser(userId) {
+    const enrollments = enrollmentModel.find({}, { name: 1, description: 1 });
+    const courses = model.find({}, { name: 1, description: 1 });
     const enrolledCourses = courses.filter((course) =>
       enrollments.some((enrollment) => enrollment.user === userId && enrollment.course === course._id));
     return enrolledCourses;

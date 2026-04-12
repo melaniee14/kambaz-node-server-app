@@ -1,4 +1,3 @@
-import { v4 as uuidv4 } from "uuid";
 import model from "./model.js"
 
 export default function EnrollmentsDao() {
@@ -28,8 +27,12 @@ export default function EnrollmentsDao() {
   function unenrollAllUsersFromCourse(courseId) {
     return model.deleteMany({ course: courseId });
   }
+
+  function findEnrollmentsForUser(userId) {
+    return model.find({user: userId});
+  }
  
 
-  return { enrollUserInCourse, unenrollUserFromCourse, findCoursesForUser, findUsersForCourse, unenrollAllUsersFromCourse };
+  return { enrollUserInCourse, unenrollUserFromCourse, findCoursesForUser, findUsersForCourse, unenrollAllUsersFromCourse, findEnrollmentsForUser };
 }
 

@@ -4,29 +4,54 @@ export default function EnrollmentsRoutes(app) {
     const dao = EnrollmentsDao();
 
     const enrollInCourse = async (req, res) => {
-        const { uid, cid } = req.params;
+        const { courseId } = req.params;
 
-        if (uid === "current") {
-            const currentUser = req.session["currentUser"];
-            uid = currentUser._id;
+
+        const currentUser = req.session["currentUser"];
+        if (!currentUser) {
+            res.sendStatus(401);
+            return;
         }
-        const status = await enrollmentsDao.enrollUserInCourse(uid, cid);
+
+        const userId = currentUser._id;
+
+        const status = await dao.enrollUserInCourse(userId, courseId);
         res.send(status);
 
     }
 
     const unenrollInCourse = async (req, res) => {
-        const { uid, cid } = req.params;
+        const { courseId } = req.params;
 
-        if (uid === "current") {
-            const currentUser = req.session["currentUser"];
-            uid = currentUser._id;
+
+        const currentUser = req.session["currentUser"];
+        if (!currentUser) {
+            res.sendStatus(401);
+            return;
         }
-        const status = await enrollmentsDao.unenrollUserFromCourse(uid, cid);
-        res.send(status);
+        const userId = currentUser._id;
 
+
+
+        const status = await dao.unenrollUserFromCourse(userId, courseId);
+        res.send(status);
+    }
+
+    const findEnrollmentsForUser = async (req, res) => {
+        let { userId } = req.params;
+        if (userId === "current") {
+            const currentUser = req.session["currentUser"];
+            if (!currentUser) {
+                res.sendStatus(401);
+                return;
+            }
+            userId = currentUser._id;
+        }
+        const enrollments = await dao.findEnrollmentsForUser(userId);
+        res.json(enrollments);
     }
 
     app.post("/api/courses/:courseId/enroll", enrollInCourse);
     app.delete("/api/courses/:courseId/enroll", unenrollInCourse);
+    app.get("/api/users/:userId/enrollments", findEnrollmentsForUser);
 }
