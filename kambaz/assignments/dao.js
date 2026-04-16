@@ -1,6 +1,6 @@
 import model from "./model.js"
 
-export default function AssignmentsDao(db) {
+export default function AssignmentsDao() {
 
     function updateAssignment(aid, assignmentUpdates) {
         return model.updateOne({_id: aid}, {$set: assignmentUpdates}); 
