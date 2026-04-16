@@ -1,37 +1,44 @@
-import model from "./model.js"
+
+import model from "./model.js";
 
 export default function QuizzesDao() {
+  function updateQuiz(qid, quizUpdates) {
+    return model.updateOne({ _id: qid }, { $set: quizUpdates });
+  }
 
-function updateQuiz(qid, quizUpdates) {
-    return model.updateOne({_id: qid}, {$set: quizUpdates}); 
-}
+  function deleteQuiz(qid) {
+    return model.deleteOne({ _id: qid });
+  }
 
-function deleteQuiz(qid) {
-    return model.deleteOne({_id : qid});
-}
-
-
-function createQuiz(quiz) {
-    const newQuiz= {
+  function createQuiz(quiz) {
+    const newQuiz = {
       _id: quiz._id,
-      title: quiz.title,
+      title: quiz.title ?? "New Quiz",
       course: quiz.course,
-      points: quiz.points,
-      newQuiz: true,
-      score: quiz.score ?? 0,
-      questions: quiz.questions ?? 0,
-      published: false,
-      desc: "New Quiz Description",
-      available: quiz.available,
-      due: quiz.due
-      };
-    
+      quizType: quiz.quizType ?? "Graded Quiz",
+      points: quiz.points ?? 0,
+      assignmentGroup: quiz.assignmentGroup ?? "Quizzes",
+      shuffleAnswers: quiz.shuffleAnswers ?? true,
+      timeLimit: quiz.timeLimit ?? 20,
+      multipleAttempts: quiz.multipleAttempts ?? false,
+      numberOfAttempts: quiz.numberOfAttempts ?? 1,
+      showCorrectAnswers: quiz.showCorrectAnswers ?? "Immediately",
+      accessCode: quiz.accessCode ?? "",
+      oneQuestionAtATime: quiz.oneQuestionAtATime ?? true,
+      webcamRequired: quiz.webcamRequired ?? false,
+      lockQuestionsAfter: quiz.lockQuestionsAfter ?? false,
+      due: quiz.due ?? "",
+      available: quiz.available ?? "",
+      until: quiz.until ?? "",
+      published: quiz.published ?? false,
+      desc: quiz.desc ?? "New Quiz Description",
+    };
     return model.create(newQuiz);
-}
+  }
 
-function findQuizzesForCourse(courseId) {
+  function findQuizzesForCourse(courseId) {
     return model.find({ course: courseId });
   }
 
-return { updateQuiz, deleteQuiz, createQuiz, findQuizzesForCourse};
+  return { updateQuiz, deleteQuiz, createQuiz, findQuizzesForCourse };
 }
