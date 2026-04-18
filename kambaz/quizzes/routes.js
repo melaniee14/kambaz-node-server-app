@@ -1,7 +1,7 @@
 import QuizzesDao from "./dao.js";
 
-export default function QuizzesRoutes(app) {
-  const { updateQuiz, deleteQuiz, createQuiz, findQuizzesForCourse } = QuizzesDao();
+export default function QuizzesRoutes(app, db) {
+  const { updateQuiz, deleteQuiz, createQuiz, findQuizzesForCourse } = QuizzesDao(db);
 
   app.post("/api/courses/:courseId/quizzes", async (req, res) => {
     const { courseId } = req.params;
@@ -18,9 +18,8 @@ export default function QuizzesRoutes(app) {
 
   app.put("/api/quizzes/:qid", async (req, res) => {
     const { qid } = req.params;
-    const quizUpdates = req.body;
-    await updateQuiz(qid, quizUpdates);
-    res.json(quizUpdates);
+    const updated = await updateQuiz(qid, req.body);
+    res.json(updated);
   });
 
   app.delete("/api/quizzes/:qid", async (req, res) => {

@@ -1,9 +1,8 @@
-
 import model from "./model.js";
 
-export default function QuizzesDao() {
+export default function QuizzesDao(db) {
   function updateQuiz(qid, quizUpdates) {
-    return model.updateOne({ _id: qid }, { $set: quizUpdates });
+    return model.findByIdAndUpdate(qid, { $set: quizUpdates }, { new: true });
   }
 
   function deleteQuiz(qid) {
@@ -12,7 +11,7 @@ export default function QuizzesDao() {
 
   function createQuiz(quiz) {
     const newQuiz = {
-      _id: quiz._id,
+      ...(quiz._id && { _id: quiz._id }),
       title: quiz.title ?? "New Quiz",
       course: quiz.course,
       quizType: quiz.quizType ?? "Graded Quiz",
