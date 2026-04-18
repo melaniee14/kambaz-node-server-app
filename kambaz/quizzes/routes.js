@@ -4,6 +4,8 @@ export default function QuizzesRoutes(app, db) {
   const { updateQuiz, deleteQuiz, createQuiz, findQuizzesForCourse } = QuizzesDao(db);
 
   app.post("/api/courses/:courseId/quizzes", async (req, res) => {
+    const currentUser = req.session["currentUser"];
+    if (!currentUser || currentUser.role !== "FACULTY") return res.sendStatus(403);
     const { courseId } = req.params;
     const quiz = { ...req.body, course: courseId };
     const newQuiz = await createQuiz(quiz);
@@ -17,12 +19,16 @@ export default function QuizzesRoutes(app, db) {
   });
 
   app.put("/api/quizzes/:qid", async (req, res) => {
+    const currentUser = req.session["currentUser"];
+    if (!currentUser || currentUser.role !== "FACULTY") return res.sendStatus(403);
     const { qid } = req.params;
     const updated = await updateQuiz(qid, req.body);
     res.json(updated);
   });
 
   app.delete("/api/quizzes/:qid", async (req, res) => {
+    const currentUser = req.session["currentUser"];
+    if (!currentUser || currentUser.role !== "FACULTY") return res.sendStatus(403);
     const { qid } = req.params;
     await deleteQuiz(qid);
     res.sendStatus(200);
