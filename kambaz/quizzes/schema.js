@@ -1,5 +1,22 @@
 import mongoose from "mongoose";
 
+const answerSchema = new mongoose.Schema({
+  id: { type: String },
+  text: { type: String, default: "" },
+  correct: { type: Boolean, default: false },
+}, { _id: false });
+
+const quizQuestionSchema = new mongoose.Schema({
+  id: { type: String },
+  type: { type: String, enum: ["multiple_choice", "true_false", "fill_in_blank"], default: "multiple_choice" },
+  title: { type: String, default: "New Question" },
+  points: { type: Number, default: 1 },
+  question: { type: String, default: "" },
+  choices: { type: [answerSchema], default: [] },
+  correctAnswer: { type: String, default: "true" },
+  blanks: { type: [String], default: [""] },
+}, { _id: false });
+
 const quizSchema = new mongoose.Schema({
   _id: String,
   title: String,
@@ -21,6 +38,7 @@ const quizSchema = new mongoose.Schema({
   until: { type: String, default: "" },
   published: { type: Boolean, default: false },
   desc: { type: String, default: "New Quiz Description" },
+  questions: { type: [quizQuestionSchema], default: [] },
 }, { collection: "quizzes" });
 
-export default  quizSchema;
+export default quizSchema;
