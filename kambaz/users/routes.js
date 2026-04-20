@@ -55,7 +55,7 @@ export default function UserRoutes(app) {
            req.session["currentUser"] = { ...currentUser, ...userUpdates };
          }
 
-         const updated = dao.findUserById(userId);
+         const updated = await dao.findUserById(userId);
     
          res.json(updated);
 

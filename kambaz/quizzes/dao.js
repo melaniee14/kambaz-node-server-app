@@ -30,14 +30,20 @@ export default function QuizzesDao(db) {
       available: quiz.available ?? "",
       until: quiz.until ?? "",
       published: quiz.published ?? false,
+      score: quiz.score ?? 0,
       desc: quiz.desc ?? "New Quiz Description",
     };
     return model.create(newQuiz);
   }
-
+  
+  function updateScore(qid, update) {
+   
+    return model.findByIdAndUpdate(qid, {$set: {score: update.score, attempts: update.attempts, 
+      previous: update.previous, prevAnswers: update.answers}});
+  }
   function findQuizzesForCourse(courseId) {
     return model.find({ course: courseId });
   }
 
-  return { updateQuiz, deleteQuiz, createQuiz, findQuizzesForCourse };
+  return { updateQuiz, updateScore, deleteQuiz, createQuiz, findQuizzesForCourse };
 }

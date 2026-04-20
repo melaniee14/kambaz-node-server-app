@@ -28,6 +28,7 @@ const quizSchema = new mongoose.Schema({
   timeLimit: { type: Number, default: 20 },
   multipleAttempts: { type: Boolean, default: false },
   numberOfAttempts: { type: Number, default: 1 },
+  attempts: {type: Number, default: 0},
   showCorrectAnswers: { type: String, default: "Immediately" },
   accessCode: { type: String, default: "" },
   oneQuestionAtATime: { type: Boolean, default: true },
@@ -38,7 +39,10 @@ const quizSchema = new mongoose.Schema({
   until: { type: String, default: "" },
   published: { type: Boolean, default: false },
   desc: { type: String, default: "New Quiz Description" },
+  score: {type: Number, default: 0},
   questions: { type: [quizQuestionSchema], default: [] },
+  previous: {type: Boolean, default: false},
+  prevAnswers: {type: mongoose.Schema.Types.Mixed, default: {}}
 }, { collection: "quizzes" });
 
 export default quizSchema;
